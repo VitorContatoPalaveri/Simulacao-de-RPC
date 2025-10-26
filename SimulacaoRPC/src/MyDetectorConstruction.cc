@@ -60,25 +60,26 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
 
 	// Gas Chamber
 
-    G4double lengthDet = 5.0 * cm;
+    G4double lengthDet = 5. * cm;
     G4double widthDet = 2. * mm;
 
     G4Box *solidDetector = new G4Box("solidDetector", 0.5 * lengthDet, 0.5 * lengthDet, 0.5 * widthDet);
     logicDetector = new G4LogicalVolume(solidDetector, rpcGas, "logicDetector");
-    physDetector = new G4PVPlacement(0, G4ThreeVector(0., 0. , 0.), logicDetector, "physDetector", logicWorld, false, checkOverlaps);
+    physDetector = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), logicDetector, "physDetector", logicWorld, false, checkOverlaps);
 
-    G4VisAttributes *detVisAtt = new G4VisAttributes(G4Color(0., 0., 1., 0.3));
+    G4VisAttributes *detVisAtt = new G4VisAttributes(G4Color(0., 0., 1., 0.1));
     detVisAtt->SetForceSolid(true);
     logicDetector->SetVisAttributes(detVisAtt);
 
 	// HPL (brakelite)
 
 	G4double widthHPL = 1. * mm;
+    G4double zHPLpos = widthDet/2 + widthHPL/2;
 
 	G4Box *solidHPL = new G4Box("solidHPL", 0.5 * lengthDet, 0.5 * lengthDet, 0.5 * widthHPL);
     logicHPL = new G4LogicalVolume(solidHPL, HPLmat, "logicHPL");
-    physHPL = new G4PVPlacement(0, G4ThreeVector(0., 0. , -1.5 * mm), logicHPL, "physHPL", logicWorld, false, checkOverlaps);
-    physHPL = new G4PVPlacement(0, G4ThreeVector(0., 0. , 1.5 * mm), logicHPL, "physHPL", logicWorld, false, checkOverlaps);
+    physHPL = new G4PVPlacement(0, G4ThreeVector(0., 0., -zHPLpos), logicHPL, "physHPL", logicWorld, false, checkOverlaps);
+    physHPL = new G4PVPlacement(0, G4ThreeVector(0., 0., zHPLpos), logicHPL, "physHPL", logicWorld, false, checkOverlaps);
 
     G4VisAttributes *HPLvisAtt = new G4VisAttributes(G4Color(1., .75, .18, 1.));
     HPLvisAtt->SetForceSolid(true);
@@ -87,11 +88,12 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
 	// Graphite
 
 	G4double widthGraphite = .1 * mm;
+    G4double zGraphitePos = widthDet/2 + widthHPL + widthGraphite/2;
 
 	G4Box *solidGraphite = new G4Box("solidGraphite", 0.5 * lengthDet, 0.5 * lengthDet, 0.5 * widthGraphite);
     logicGraphite = new G4LogicalVolume(solidGraphite, graphiteMat, "logicGraphite");
-    physGraphite = new G4PVPlacement(0, G4ThreeVector(0., 0. , -2.05 * mm), logicGraphite, "physGraphite", logicWorld, false, checkOverlaps);
-    physGraphite = new G4PVPlacement(0, G4ThreeVector(0., 0. , 2.05 * mm), logicGraphite, "physGraphite", logicWorld, false, checkOverlaps);
+    physGraphite = new G4PVPlacement(0, G4ThreeVector(0., 0., -zGraphitePos), logicGraphite, "physGraphite", logicWorld, false, checkOverlaps);
+    physGraphite = new G4PVPlacement(0, G4ThreeVector(0., 0., zGraphitePos), logicGraphite, "physGraphite", logicWorld, false, checkOverlaps);
 
     G4VisAttributes *graVisAtt = new G4VisAttributes(G4Color(.22, .28, .31, 1.));
     graVisAtt->SetForceSolid(true);
@@ -100,11 +102,12 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
 	// Insulator
 
 	G4double widthIns = .1 * mm;
+    G4double zInsPos = widthDet/2 + widthHPL + widthGraphite + widthIns/2;
 
 	G4Box *solidInsulator = new G4Box("solidInsulator", 0.5 * lengthDet, 0.5 * lengthDet, 0.5 * widthIns);
     logicInsulator = new G4LogicalVolume(solidInsulator, insulatorMat, "logicInsulator");
-    physInsulator = new G4PVPlacement(0, G4ThreeVector(0., 0. , -2.15 * mm), logicInsulator, "physInsulator", logicWorld, false, checkOverlaps);
-    physInsulator = new G4PVPlacement(0, G4ThreeVector(0., 0. , 2.15 * mm), logicInsulator, "physInsulator", logicWorld, false, checkOverlaps);
+    physInsulator = new G4PVPlacement(0, G4ThreeVector(0., 0., -zInsPos), logicInsulator, "physInsulator", logicWorld, false, checkOverlaps);
+    physInsulator = new G4PVPlacement(0, G4ThreeVector(0., 0., zInsPos), logicInsulator, "physInsulator", logicWorld, false, checkOverlaps);
 
     G4VisAttributes *insVisAtt = new G4VisAttributes(G4Color(.6, .6, .6, 1.));
     insVisAtt->SetForceSolid(true);
@@ -113,10 +116,11 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
 	// Readout strip (copper)
 
 	G4double widthCopper = .02 * mm;
+    G4double zCopperPos = widthDet/2 + widthHPL + widthGraphite + widthIns + widthCopper/2;
 
 	G4Box *solidCopper = new G4Box("solidCopper", 0.5 * lengthDet, 0.5 * lengthDet, 0.5 * widthCopper);
     logicCopper = new G4LogicalVolume(solidCopper, copperMat, "logicCopper");
-    physCopper = new G4PVPlacement(0, G4ThreeVector(0., 0. , 2.21 * mm), logicCopper, "physCopper", logicWorld, false, checkOverlaps);
+    physCopper = new G4PVPlacement(0, G4ThreeVector(0., 0., zCopperPos), logicCopper, "physCopper", logicWorld, false, checkOverlaps);
 
     G4VisAttributes *copVisAtt = new G4VisAttributes(G4Color(.9, .29, .01, 1.));
     copVisAtt->SetForceSolid(true);

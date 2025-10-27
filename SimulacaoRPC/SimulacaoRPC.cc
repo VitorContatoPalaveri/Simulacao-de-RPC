@@ -14,7 +14,7 @@
 #include <G4LogicalVolumeStore.hh>
 #include <G4SolidStore.hh>
 
-// #include "MyPhysicsList.hh"
+#include "MyPhysicsList.hh"
 #include "MyDetectorConstruction.hh"
 #include "MyActionInitialization.hh"
 

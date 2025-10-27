@@ -19,8 +19,5 @@ MyPhysicsList::MyPhysicsList() {
 }
 
 MyPhysicsList::~MyPhysicsList() {
-    delete emPhysics;
-    delete hadronPhysics;
-    delete decayPhysics;
-    delete ionElasticPhysics;
+
 }

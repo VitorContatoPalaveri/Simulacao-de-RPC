@@ -6,25 +6,25 @@ MyPrimaryGenerator::MyPrimaryGenerator(){
 
     // Particle position
     G4double x = 0. * mm;
-    G4double y = 0. * mm;
-    G4double z = -3. * mm;
+    G4double z = -(config::widthDet/2 + config::widthHPL + config::widthGraphite + config::widthIns + config::widthCopper + 2 * mm);
+    G4double y = z * std::tan(config::theta);
 
     G4ThreeVector pos(x, y, z);
 
     // Particle direction
     G4double px = 0.;
-    G4double py = 0.;
-    G4double pz = 1.;
+    G4double py = std::sin(config::theta);
+    G4double pz = std::cos(config::theta);
 
     G4ThreeVector mom(px, py, pz);
 
     // Particle type
     G4ParticleTable *particleTable = G4ParticleTable::GetParticleTable();
-    G4ParticleDefinition *particle = particleTable->FindAntiParticle("mu-");
+    G4ParticleDefinition *particle = particleTable->FindAntiParticle(config::particleName);
 
     fParticleGun->SetParticlePosition(pos);
     fParticleGun->SetParticleMomentum(mom);
-    fParticleGun->SetParticleEnergy(1. * GeV);
+    fParticleGun->SetParticleEnergy(config::particleEnergy);
     fParticleGun->SetParticleDefinition(particle);
 }
 

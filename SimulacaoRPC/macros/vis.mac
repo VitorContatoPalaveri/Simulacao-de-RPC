@@ -9,4 +9,5 @@
 
 /vis/scene/add/trajectories smooth
 /vis/scene/endOfEventAction accumulate
+# /vis/scene/add/axes
 /vis/scene/add/eventID

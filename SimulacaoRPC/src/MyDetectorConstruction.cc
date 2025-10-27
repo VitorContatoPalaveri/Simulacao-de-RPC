@@ -16,6 +16,10 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
 	G4Material* copperMat = nist->FindOrBuildMaterial("G4_Cu");
 
     // === CRIAÇÃO DA MISTURA GASOSA DA RPC ===
+
+    G4double C2H2F4_fraction = config::C2H2F4_fraction;
+    G4double isobutane_fraction = config::isobutane_fraction;
+    G4double SF6_fraction = config::SF6_fraction;
     
     // Definir elementos
     G4Element *elC = nist->FindOrBuildElement("C");
@@ -42,17 +46,17 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
     SF6->AddElement(elF, 6);
     
     // Criar a mistura (RPC gas mixture)
-    G4double density_mixture = 0.952*4.25 + 0.045*2.51 + 0.003*6.17; // densidade ponderada em kg/m3
+    G4double density_mixture = C2H2F4_fraction*4.25 + isobutane_fraction*2.51 + SF6_fraction*6.17; // densidade ponderada em kg/m3
     G4Material *rpcGas = new G4Material("RPCGas", density_mixture*kg/m3, 3, kStateGas, 293.15*kelvin, 1*atmosphere);
-    rpcGas->AddMaterial(C2H2F4, 95.2*perCent);
-    rpcGas->AddMaterial(isobutane, 4.5*perCent);
-    rpcGas->AddMaterial(SF6, 0.3*perCent);
+    rpcGas->AddMaterial(C2H2F4, C2H2F4_fraction);
+    rpcGas->AddMaterial(isobutane, isobutane_fraction);
+    rpcGas->AddMaterial(SF6, SF6_fraction);
     
     // === FIM DA CRIAÇÃO DA MISTURA ===
 
 	// World
 
-    G4double rWorld = 5. * cm;
+    G4double rWorld = config::lengthDet * std::sqrt(2);
 
     G4Sphere *solidWorld = new G4Sphere("solidWorld", 0.0, rWorld, 0.0, 360. * deg, 0.0, 180. * deg);
     G4LogicalVolume *logicWorld = new G4LogicalVolume(solidWorld, worldMat, "logicalWorld");
@@ -60,8 +64,8 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
 
 	// Gas Chamber
 
-    G4double lengthDet = 5. * cm;
-    G4double widthDet = 2. * mm;
+    G4double lengthDet = config::lengthDet;
+    G4double widthDet = config::widthDet;
 
     G4Box *solidDetector = new G4Box("solidDetector", 0.5 * lengthDet, 0.5 * lengthDet, 0.5 * widthDet);
     logicDetector = new G4LogicalVolume(solidDetector, rpcGas, "logicDetector");
@@ -73,7 +77,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
 
 	// HPL (brakelite)
 
-	G4double widthHPL = 1. * mm;
+	G4double widthHPL = config::widthHPL;
     G4double zHPLpos = widthDet/2 + widthHPL/2;
 
 	G4Box *solidHPL = new G4Box("solidHPL", 0.5 * lengthDet, 0.5 * lengthDet, 0.5 * widthHPL);
@@ -87,7 +91,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
 
 	// Graphite
 
-	G4double widthGraphite = .1 * mm;
+	G4double widthGraphite = config::widthGraphite;
     G4double zGraphitePos = widthDet/2 + widthHPL + widthGraphite/2;
 
 	G4Box *solidGraphite = new G4Box("solidGraphite", 0.5 * lengthDet, 0.5 * lengthDet, 0.5 * widthGraphite);
@@ -99,9 +103,9 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
     graVisAtt->SetForceSolid(true);
     logicGraphite->SetVisAttributes(graVisAtt);
 
-	// Insulator
+	// Insulator (polyehylene)
 
-	G4double widthIns = .1 * mm;
+	G4double widthIns = config::widthIns;
     G4double zInsPos = widthDet/2 + widthHPL + widthGraphite + widthIns/2;
 
 	G4Box *solidInsulator = new G4Box("solidInsulator", 0.5 * lengthDet, 0.5 * lengthDet, 0.5 * widthIns);
@@ -115,7 +119,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
 
 	// Readout strip (copper)
 
-	G4double widthCopper = .02 * mm;
+	G4double widthCopper = config::widthCopper;
     G4double zCopperPos = widthDet/2 + widthHPL + widthGraphite + widthIns + widthCopper/2;
 
 	G4Box *solidCopper = new G4Box("solidCopper", 0.5 * lengthDet, 0.5 * lengthDet, 0.5 * widthCopper);

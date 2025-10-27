@@ -20,6 +20,7 @@
 #include <G4SDManager.hh>
 
 #include "MySensitiveDetector.hh"
+#include "config.hh"
 
 class MyDetectorConstruction : public G4VUserDetectorConstruction{
 

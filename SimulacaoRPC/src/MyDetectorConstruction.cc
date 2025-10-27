@@ -117,35 +117,26 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
     insVisAtt->SetForceSolid(true);
     logicInsulator->SetVisAttributes(insVisAtt);
 
-	// Readout strip (copper)
+    // Readout strip (copper)
 
-	G4double widthCopper = config::widthCopper;
+    G4double widthCopper = config::widthCopper;
     G4double zCopperPos = widthDet/2 + widthHPL + widthGraphite + widthIns + widthCopper/2;
 
-	// G4Box *solidCopper = new G4Box("solidCopper", 0.5 * lengthDet, 0.5 * lengthDet, 0.5 * widthCopper);
-    // logicCopper = new G4LogicalVolume(solidCopper, copperMat, "logicCopper");
-    // physCopper = new G4PVPlacement(0, G4ThreeVector(0., 0., zCopperPos), logicCopper, "physCopper", logicWorld, false, checkOverlaps);
+    G4int nRows = config::nRows;
+    G4int nCols = config::nCols;
 
-    // G4VisAttributes *copVisAtt = new G4VisAttributes(G4Color(.9, .29, .01, .5));
-    // copVisAtt->SetForceSolid(true);
-    // logicCopper->SetVisAttributes(copVisAtt);
-
-    // Readout construction
-
-    G4int n = 100;
-
-    G4Box *solidReadout = new G4Box("solidReadout", 0.5 * lengthDet/n, 0.5 * lengthDet/n, 0.5 * widthCopper);
-    logicReadout = new G4LogicalVolume(solidReadout, copperMat, "logicReadout");
+    G4Box *solidCopper = new G4Box("solidCopper", 0.5 * lengthDet/nRows, 0.5 * lengthDet/nCols, 0.5 * widthCopper);
+    logicCopper = new G4LogicalVolume(solidCopper, copperMat, "logicCopper");
     
-    for(G4int i = 0; i < n; i++){
-        for(G4int j = 0; j < n; j++){
-            physReadout = new G4PVPlacement(0, G4ThreeVector(-0.5 * lengthDet + ((i+0.5) * lengthDet)/n, -0.5 * lengthDet + ((j+0.5) * lengthDet)/n, zCopperPos), logicReadout, "physReadout", logicWorld, false, j+i*n, checkOverlaps);
+    for(G4int i = 0; i < nRows; i++){
+        for(G4int j = 0; j < nCols; j++){
+            physCopper = new G4PVPlacement(0, G4ThreeVector(-0.5 * lengthDet + ((i+0.5) * lengthDet)/nRows, -0.5 * lengthDet + ((j+0.5) * lengthDet)/nCols, zCopperPos), logicCopper, "physCopper", logicWorld, false, j+i*nCols, checkOverlaps);
         }
     }
 
     G4VisAttributes *copVisAtt = new G4VisAttributes(G4Color(.9, .29, .01, 1.));
     copVisAtt->SetForceSolid(true);
-    logicReadout->SetVisAttributes(copVisAtt);
+    logicCopper->SetVisAttributes(copVisAtt);
 
     return physWorld;
 }
@@ -153,6 +144,5 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
 void MyDetectorConstruction::ConstructSDandField(){
 
     MySensitiveDetector *sensDet = new MySensitiveDetector("SensitiveDetector");
-    logicReadout->SetSensitiveDetector(sensDet);
-    // G4SDManager::GetSDMpointer()->AddNewDetector(sensDet);
+    logicCopper->SetSensitiveDetector(sensDet);
 }

@@ -23,6 +23,8 @@ namespace config{
 
     // Readout strip (copper)
 	const G4double widthCopper = .02 * mm;
+    const G4int nRows = 100;
+    const G4int nCols = 100;
 
     // GAS FRACTIONS
 

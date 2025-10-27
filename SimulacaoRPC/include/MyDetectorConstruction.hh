@@ -46,9 +46,6 @@ private:
 	G4LogicalVolume *logicCopper;
 	G4VPhysicalVolume *physCopper;
 
-	G4LogicalVolume *logicReadout;
-	G4VPhysicalVolume *physReadout;
-
     virtual void ConstructSDandField();
 };
 

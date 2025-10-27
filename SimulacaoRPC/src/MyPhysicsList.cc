@@ -1,8 +1,4 @@
 #include "MyPhysicsList.hh"
-#include <G4EmStandardPhysics.hh>
-#include <G4HadronPhysicsQGSP_BERT.hh>
-#include <G4DecayPhysics.hh>
-#include <G4IonElasticPhysics.hh>
 
 MyPhysicsList::MyPhysicsList() {
     //Inicializa os módulos de física
@@ -18,9 +14,4 @@ MyPhysicsList::MyPhysicsList() {
     RegisterPhysics(ionElasticPhysics);
 }
 
-MyPhysicsList::~MyPhysicsList() {
-    delete emPhysics;
-    delete hadronPhysics;
-    delete decayPhysics;
-    delete ionElasticPhysics;
-}
+MyPhysicsList::~MyPhysicsList() {}

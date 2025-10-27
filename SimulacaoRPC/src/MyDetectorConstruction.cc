@@ -122,20 +122,37 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
 	G4double widthCopper = config::widthCopper;
     G4double zCopperPos = widthDet/2 + widthHPL + widthGraphite + widthIns + widthCopper/2;
 
-	G4Box *solidCopper = new G4Box("solidCopper", 0.5 * lengthDet, 0.5 * lengthDet, 0.5 * widthCopper);
-    logicCopper = new G4LogicalVolume(solidCopper, copperMat, "logicCopper");
-    physCopper = new G4PVPlacement(0, G4ThreeVector(0., 0., zCopperPos), logicCopper, "physCopper", logicWorld, false, checkOverlaps);
+	// G4Box *solidCopper = new G4Box("solidCopper", 0.5 * lengthDet, 0.5 * lengthDet, 0.5 * widthCopper);
+    // logicCopper = new G4LogicalVolume(solidCopper, copperMat, "logicCopper");
+    // physCopper = new G4PVPlacement(0, G4ThreeVector(0., 0., zCopperPos), logicCopper, "physCopper", logicWorld, false, checkOverlaps);
+
+    // G4VisAttributes *copVisAtt = new G4VisAttributes(G4Color(.9, .29, .01, .5));
+    // copVisAtt->SetForceSolid(true);
+    // logicCopper->SetVisAttributes(copVisAtt);
+
+    // Readout construction
+
+    G4int n = 100;
+
+    G4Box *solidReadout = new G4Box("solidReadout", 0.5 * lengthDet/n, 0.5 * lengthDet/n, 0.5 * widthCopper);
+    logicReadout = new G4LogicalVolume(solidReadout, copperMat, "logicReadout");
+    
+    for(G4int i = 0; i < n; i++){
+        for(G4int j = 0; j < n; j++){
+            physReadout = new G4PVPlacement(0, G4ThreeVector(-0.5 * lengthDet + ((i+0.5) * lengthDet)/n, -0.5 * lengthDet + ((j+0.5) * lengthDet)/n, zCopperPos), logicReadout, "physReadout", logicWorld, false, j+i*n, checkOverlaps);
+        }
+    }
 
     G4VisAttributes *copVisAtt = new G4VisAttributes(G4Color(.9, .29, .01, 1.));
     copVisAtt->SetForceSolid(true);
-    logicCopper->SetVisAttributes(copVisAtt);
+    logicReadout->SetVisAttributes(copVisAtt);
 
     return physWorld;
 }
 
 void MyDetectorConstruction::ConstructSDandField(){
 
-    // MySensitiveDetector *sensDet = new MySensitiveDetector("SensitiveDetector");
-    // logicDetector->SetSensitiveDetector(sensDet);
+    MySensitiveDetector *sensDet = new MySensitiveDetector("SensitiveDetector");
+    logicReadout->SetSensitiveDetector(sensDet);
     // G4SDManager::GetSDMpointer()->AddNewDetector(sensDet);
 }

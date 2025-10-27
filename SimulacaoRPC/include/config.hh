@@ -18,7 +18,7 @@ namespace config{
     // Graphite
 	const G4double widthGraphite = .1 * mm;
 
-    // Insulator (polyehylene)
+    // Insulator (polyethylene)
 	const G4double widthIns = .1 * mm;
 
     // Readout strip (copper)

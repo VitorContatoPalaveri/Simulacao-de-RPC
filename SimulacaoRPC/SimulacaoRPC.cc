@@ -29,9 +29,9 @@ int main(int argc, char** argv){
     #endif
 
     // Physics List - FTFP_BERT
-    // runManager->SetUserInitialization(new MyPhysicsList());
-    G4VModularPhysicsList* physicsList = new FTFP_BERT;
-    runManager->SetUserInitialization(physicsList);
+    runManager->SetUserInitialization(new MyPhysicsList());
+    //G4VModularPhysicsList* physicsList = new FTFP_BERT;
+    //runManager->SetUserInitialization(physicsList);
 
     // Detector Construction
     runManager->SetUserInitialization(new MyDetectorConstruction());

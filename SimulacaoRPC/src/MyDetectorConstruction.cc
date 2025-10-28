@@ -62,6 +62,8 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
     G4LogicalVolume *logicWorld = new G4LogicalVolume(solidWorld, worldMat, "logicalWorld");
     G4VPhysicalVolume *physWorld = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), logicWorld, "physWorld", 0, false, 0, checkOverlaps);
 
+    logicWorld->SetVisAttributes(G4VisAttributes::GetInvisible());  // Makes invisible (Duran Duran)
+
 	// Gas Chamber
 
     G4double lengthDet = config::lengthDet;

@@ -2,6 +2,7 @@
 #define MYRUNACTION_HH
 
 #include <G4UserRunAction.hh>
+#include <G4Run.hh>
 
 #include <G4RootAnalysisManager.hh> // #include <G4AnalysisManager.hh>
 

@@ -33,6 +33,8 @@ int main(int argc, char** argv){
     // Action Initialization
     runManager->SetUserInitialization(new MyActionInitialization());
 
+    runManager->Initialize();
+
     G4UIExecutive *ui = 0;
 
     if(argc == 1){

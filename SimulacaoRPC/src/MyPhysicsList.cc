@@ -15,7 +15,7 @@ MyPhysicsList::MyPhysicsList() {
     RegisterPhysics(ionElasticPhysics);
 
     // Diminuir threshold de produção de elétrons delta
-    SetDefaultCutValue(0.1 * mm);  // Corte padrão
+    SetDefaultCutValue(1. * um);  // Corte padrão
     
     // Habilitar parâmetros EM para melhor ionização
     G4EmParameters* emParams = G4EmParameters::Instance();
@@ -27,15 +27,20 @@ MyPhysicsList::MyPhysicsList() {
     emParams->SetDeexcitationIgnoreCut(true);   // Ignorar cortes para de-excitação
     
     // Diminuir threshold de produção de secundários
-    emParams->SetLowestElectronEnergy(10.0 * eV);   // Energia mínima de elétrons
-    emParams->SetLowestMuHadEnergy(10.0 * eV);      // Energia mínima de partículas
+    emParams->SetLowestElectronEnergy(1. * eV);   // Energia mínima de elétrons
+    emParams->SetLowestMuHadEnergy(1. * eV);      // Energia mínima de partículas
     
     // Melhorar precisão de ionização
-    emParams->SetStepFunction(0.2, 0.01 * mm);      // step function mais refinada
-    emParams->SetMscRangeFactor(0.02);              // Range factor para multiple scattering
+    emParams->SetStepFunction(0.1, 0.001 * mm);  // Passos muito pequenos
+    emParams->SetMscRangeFactor(0.01);
+
+    // Linear loss limit (importante para elétrons lentos)
+    emParams->SetLinearLossLimit(0.01);
     
     // Habilitar perda de energia sub-threshold
     emParams->SetApplyCuts(false);  // Não aplicar cortes rigidamente
+
+    G4cout << "=== PhysicsList configurada para elétrons de baixa energia ===" << G4endl;
 }
 
 MyPhysicsList::~MyPhysicsList() {}

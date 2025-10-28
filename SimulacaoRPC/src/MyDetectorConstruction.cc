@@ -150,26 +150,18 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
     gasCuts->SetProductionCut(0.01 * mm);
     gasRegion->SetProductionCuts(gasCuts);
 
-    // Região da Bakelita (HPL)
-    G4Region* hplRegion = new G4Region("HPLRegion");
-    hplRegion->AddRootLogicalVolume(logicHPL);
-    G4ProductionCuts* hplCuts = new G4ProductionCuts();
-    hplCuts->SetProductionCut(0.001 * mm);  // Muito pequeno!
-    hplRegion->SetProductionCuts(hplCuts);
-    
-    // Região do Grafite
-    G4Region* graphiteRegion = new G4Region("GraphiteRegion");
-    graphiteRegion->AddRootLogicalVolume(logicGraphite);
-    G4ProductionCuts* graphiteCuts = new G4ProductionCuts();
-    graphiteCuts->SetProductionCut(0.001 * mm);
-    graphiteRegion->SetProductionCuts(graphiteCuts);
-    
-    // Região do Isolante (Polietileno)
-    G4Region* insulatorRegion = new G4Region("InsulatorRegion");
-    insulatorRegion->AddRootLogicalVolume(logicInsulator);
-    G4ProductionCuts* insulatorCuts = new G4ProductionCuts();
-    insulatorCuts->SetProductionCut(0.001 * mm);
-    insulatorRegion->SetProductionCuts(insulatorCuts);
+    G4ProductionCuts* fineCuts = new G4ProductionCuts();
+    fineCuts->SetProductionCut(0.001 * mm);
+
+    G4Region* detectorRegion = new G4Region("DetectorRegion");
+    detectorRegion->AddRootLogicalVolume(logicHPL);
+    detectorRegion->AddRootLogicalVolume(logicGraphite);
+    detectorRegion->AddRootLogicalVolume(logicInsulator);
+    detectorRegion->SetProductionCuts(fineCuts);
+
+    logicHPL->SetUserLimits(new G4UserLimits(0.1 * widthHPL));
+    logicGraphite->SetUserLimits(new G4UserLimits(0.1 * widthGraphite));
+    logicInsulator->SetUserLimits(new G4UserLimits(0.1 * widthIns));
 
     return physWorld;
 }
@@ -201,6 +193,13 @@ void MyDetectorConstruction::ConstructElectricField(){
 	// Set which parts will have eletric field
 	logicDetector->SetFieldManager(fFieldManager, true);
 	logicHPL->SetFieldManager(fFieldManager, true);
+
+    // Ajustar precisão
+    fFieldManager->SetDeltaOneStep(0.01 * mm);
+    fFieldManager->SetDeltaIntersection(0.001 * mm);
+    
+    G4cout << "Campo elétrico: " << electricFieldStrength/(kilovolt/mm) << " kV/mm" << G4endl;
+    G4cout << "Gap total: " << gap/mm << " mm" << G4endl;
 }
 
 /**

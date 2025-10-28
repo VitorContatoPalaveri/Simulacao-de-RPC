@@ -46,6 +46,14 @@ int main(int argc, char** argv){
 
     G4UImanager *UImanager = G4UImanager::GetUIpointer();
 
+    // === AUMENTAR LIMITE DE STEPS ===
+    // UImanager->ApplyCommand("/tracking/verbose 1");
+    UImanager->ApplyCommand("/process/em/verbose 0");
+    UImanager->ApplyCommand("/cuts/setMaxCutEnergy 1 keV");
+    
+    // Aumentar número máximo de steps
+    UImanager->ApplyCommand("/tracking/storeTrajectory 1");
+
     if(ui){
         UImanager->ApplyCommand("/control/execute vis.mac");
         ui->SessionStart();

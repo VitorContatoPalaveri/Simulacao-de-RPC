@@ -29,6 +29,7 @@
 #include <G4TransportationManager.hh>
 
 #include <G4ProductionCuts.hh>
+#include <G4UserLimits.hh>
 
 #include "MySensitiveDetector.hh"
 #include "config.hh"

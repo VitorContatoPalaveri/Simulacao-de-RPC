@@ -4,7 +4,7 @@
 
 - CMake 3.16 ou superior
 - ROOT 6
-- Geant4 11
+- Geant4-11
 
 ## Como executar
 

@@ -143,6 +143,34 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
     copVisAtt->SetForceSolid(true);
     logicCopper->SetVisAttributes(copVisAtt);
 
+    // === CORTES DE PRODUÇÃO ESPECÍFICOS PARA O GÁS ===
+    G4Region* gasRegion = new G4Region("GasRegion");
+    gasRegion->AddRootLogicalVolume(logicDetector);
+    G4ProductionCuts* gasCuts = new G4ProductionCuts();
+    gasCuts->SetProductionCut(0.01 * mm);
+    gasRegion->SetProductionCuts(gasCuts);
+
+    // Região da Bakelita (HPL)
+    G4Region* hplRegion = new G4Region("HPLRegion");
+    hplRegion->AddRootLogicalVolume(logicHPL);
+    G4ProductionCuts* hplCuts = new G4ProductionCuts();
+    hplCuts->SetProductionCut(0.001 * mm);  // Muito pequeno!
+    hplRegion->SetProductionCuts(hplCuts);
+    
+    // Região do Grafite
+    G4Region* graphiteRegion = new G4Region("GraphiteRegion");
+    graphiteRegion->AddRootLogicalVolume(logicGraphite);
+    G4ProductionCuts* graphiteCuts = new G4ProductionCuts();
+    graphiteCuts->SetProductionCut(0.001 * mm);
+    graphiteRegion->SetProductionCuts(graphiteCuts);
+    
+    // Região do Isolante (Polietileno)
+    G4Region* insulatorRegion = new G4Region("InsulatorRegion");
+    insulatorRegion->AddRootLogicalVolume(logicInsulator);
+    G4ProductionCuts* insulatorCuts = new G4ProductionCuts();
+    insulatorCuts->SetProductionCut(0.001 * mm);
+    insulatorRegion->SetProductionCuts(insulatorCuts);
+
     return physWorld;
 }
 

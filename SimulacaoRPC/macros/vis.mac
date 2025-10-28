@@ -1,5 +1,8 @@
 /vis/open OGL 600x600-0+0
 
+# /gun/particle mu+
+# /gun/momentumAmp 1 GeV
+
 /vis/viewer/set/viewpointVector -1 0 0
 /vis/viewer/set/autoRefresh true
 

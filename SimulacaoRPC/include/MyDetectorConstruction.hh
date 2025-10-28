@@ -28,6 +28,8 @@
 #include <G4MagIntegratorDriver.hh>
 #include <G4TransportationManager.hh>
 
+#include <G4ProductionCuts.hh>
+
 #include "MySensitiveDetector.hh"
 #include "config.hh"
 

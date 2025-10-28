@@ -41,7 +41,7 @@ namespace config{
 
     const G4String particleName = "mu+";
     const G4double particleEnergy = 1. * GeV;
-    const G4double theta = 20. * degree;
+    const G4double theta = 40. * degree;
 };
 
 #endif

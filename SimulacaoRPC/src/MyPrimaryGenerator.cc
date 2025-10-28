@@ -20,10 +20,10 @@ MyPrimaryGenerator::MyPrimaryGenerator(){
 
     // Particle type
     G4ParticleTable *particleTable = G4ParticleTable::GetParticleTable();
-    G4ParticleDefinition *particle = particleTable->FindAntiParticle(config::particleName);
+    G4ParticleDefinition *particle = particleTable->FindParticle(config::particleName);
 
     fParticleGun->SetParticlePosition(pos);
-    fParticleGun->SetParticleMomentum(mom);
+    fParticleGun->SetParticleMomentumDirection(mom);
     fParticleGun->SetParticleEnergy(config::particleEnergy);
     fParticleGun->SetParticleDefinition(particle);
 }

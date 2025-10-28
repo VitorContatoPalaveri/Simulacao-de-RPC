@@ -10,16 +10,18 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
 
     G4NistManager *nist  = G4NistManager::Instance();
     G4Material *worldMat = nist->FindOrBuildMaterial("G4_Galactic");
-    G4Material* insulatorMat = nist->FindOrBuildMaterial("G4_POLYETHYLENE");
-	G4Material* graphiteMat = nist->FindOrBuildMaterial("G4_GRAPHITE");
+    G4Material* insulator = nist->FindOrBuildMaterial("G4_POLYETHYLENE");
+	G4Material* graphite = nist->FindOrBuildMaterial("G4_GRAPHITE");
 	G4Material* HPLmat = nist->FindOrBuildMaterial("G4_BAKELITE");
-	G4Material* copperMat = nist->FindOrBuildMaterial("G4_Cu");
+	G4Material* copper = nist->FindOrBuildMaterial("G4_Cu");
+	G4Material* CO2 = nist->FindOrBuildMaterial("G4_CARBON_DIOXIDE");
 
     // === CRIAÇÃO DA MISTURA GASOSA DA RPC ===
 
     G4double C2H2F4_fraction = config::C2H2F4_fraction;
     G4double isobutane_fraction = config::isobutane_fraction;
     G4double SF6_fraction = config::SF6_fraction;
+    G4double CO2_fraction = config::CO2_fraction;
     
     // Definir elementos
     G4Element *elC = nist->FindOrBuildElement("C");
@@ -46,11 +48,12 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
     SF6->AddElement(elF, 6);
     
     // Criar a mistura (RPC gas mixture)
-    G4double density_mixture = C2H2F4_fraction*4.25 + isobutane_fraction*2.51 + SF6_fraction*6.17; // densidade ponderada em kg/m3
-    G4Material *rpcGas = new G4Material("RPCGas", density_mixture*kg/m3, 3, kStateGas, 293.15*kelvin, 1*atmosphere);
+    G4double density_mixture = C2H2F4_fraction*4.25 + isobutane_fraction*2.51 + SF6_fraction*6.17 + CO2_fraction*1.84; // densidade ponderada em kg/m3
+    G4Material *rpcGas = new G4Material("RPCGas", density_mixture*kg/m3, 4, kStateGas, 293.15*kelvin, 1*atmosphere);
     rpcGas->AddMaterial(C2H2F4, C2H2F4_fraction);
     rpcGas->AddMaterial(isobutane, isobutane_fraction);
     rpcGas->AddMaterial(SF6, SF6_fraction);
+    rpcGas->AddMaterial(CO2, CO2_fraction);
     
     // === FIM DA CRIAÇÃO DA MISTURA ===
 
@@ -97,7 +100,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
     G4double zGraphitePos = widthDet/2 + widthHPL + widthGraphite/2;
 
 	G4Box *solidGraphite = new G4Box("solidGraphite", 0.5 * lengthDet, 0.5 * lengthDet, 0.5 * widthGraphite);
-    logicGraphite = new G4LogicalVolume(solidGraphite, graphiteMat, "logicGraphite");
+    logicGraphite = new G4LogicalVolume(solidGraphite, graphite, "logicGraphite");
     physGraphite = new G4PVPlacement(0, G4ThreeVector(0., 0., -zGraphitePos), logicGraphite, "physGraphite", logicWorld, false, checkOverlaps);
     physGraphite = new G4PVPlacement(0, G4ThreeVector(0., 0., zGraphitePos), logicGraphite, "physGraphite", logicWorld, false, checkOverlaps);
 
@@ -111,7 +114,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
     G4double zInsPos = widthDet/2 + widthHPL + widthGraphite + widthIns/2;
 
 	G4Box *solidInsulator = new G4Box("solidInsulator", 0.5 * lengthDet, 0.5 * lengthDet, 0.5 * widthIns);
-    logicInsulator = new G4LogicalVolume(solidInsulator, insulatorMat, "logicInsulator");
+    logicInsulator = new G4LogicalVolume(solidInsulator, insulator, "logicInsulator");
     physInsulator = new G4PVPlacement(0, G4ThreeVector(0., 0., -zInsPos), logicInsulator, "physInsulator", logicWorld, false, checkOverlaps);
     physInsulator = new G4PVPlacement(0, G4ThreeVector(0., 0., zInsPos), logicInsulator, "physInsulator", logicWorld, false, checkOverlaps);
 
@@ -128,7 +131,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
     G4int nCols = config::nCols;
 
     G4Box *solidCopper = new G4Box("solidCopper", 0.5 * lengthDet/nRows, 0.5 * lengthDet/nCols, 0.5 * widthCopper);
-    logicCopper = new G4LogicalVolume(solidCopper, copperMat, "logicCopper");
+    logicCopper = new G4LogicalVolume(solidCopper, copper, "logicCopper");
     
     for(G4int i = 0; i < nRows; i++){
         for(G4int j = 0; j < nCols; j++){

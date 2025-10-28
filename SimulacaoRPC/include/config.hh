@@ -13,28 +13,29 @@ namespace config{
     const G4double widthDet = 2. * mm;
 
     // HPL (brakelite)
-    const G4double widthHPL = 1. * mm;
+    const G4double widthHPL = 2. * mm;
 
     // Graphite
-	const G4double widthGraphite = .1 * mm;
+	const G4double widthGraphite = .3 * mm;
 
     // Insulator (polyethylene)
-	const G4double widthIns = .1 * mm;
+	const G4double widthIns = .3 * mm;
 
     // Readout strip (copper)
-	const G4double widthCopper = .02 * mm;
-    const G4int nRows = 100;
-    const G4int nCols = 100;
+	const G4double widthCopper = .04 * mm;
+    const G4int nRows = 128;
+    const G4int nCols = 128;
 
     // GAS FRACTIONS
 
     const G4double C2H2F4_fraction = 95.2 * perCent;
     const G4double isobutane_fraction = 4.5 * perCent;
     const G4double SF6_fraction = 0.3 * perCent;
+    const G4double CO2_fraction = 0. * perCent;
 
     // PARTICLE GUN
 
-    const G4String particleName = "mu-";
+    const G4String particleName = "mu+";
     const G4double particleEnergy = 1. * GeV;
     const G4double theta = 20. * degree;
 };

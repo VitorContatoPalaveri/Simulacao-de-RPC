@@ -19,6 +19,15 @@
 #include <G4Color.hh>
 #include <G4SDManager.hh>
 
+#include <G4UniformElectricField.hh>
+#include <G4FieldManager.hh>
+#include <G4EqMagElectricField.hh>
+#include <G4MagIntegratorStepper.hh>
+#include <G4ChordFinder.hh>
+#include <G4ClassicalRK4.hh>
+#include <G4MagIntegratorDriver.hh>
+#include <G4TransportationManager.hh>
+
 #include "MySensitiveDetector.hh"
 #include "config.hh"
 
@@ -47,6 +56,17 @@ private:
 	G4VPhysicalVolume *physCopper;
 
     virtual void ConstructSDandField();
+
+	// Campo elétrico
+    G4UniformElectricField* fElectricField;
+    G4FieldManager* fFieldManager;
+    G4EqMagElectricField* fEquation;
+    G4MagIntegratorStepper* fStepper;
+	G4MagInt_Driver* fIntDriver;
+    G4ChordFinder* fChordFinder;
+
+	virtual void ConstructElectricField();
+	virtual void CreateChordFinder(G4FieldManager*, G4ElectricField*);
 };
 
 #endif

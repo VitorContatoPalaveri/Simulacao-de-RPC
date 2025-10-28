@@ -33,6 +33,10 @@ namespace config{
     const G4double SF6_fraction = 0.3 * perCent;
     const G4double CO2_fraction = 0. * perCent;
 
+    // ELECTRIC FIELD
+
+    const G4double voltage = 10. * kilovolt;
+
     // PARTICLE GUN
 
     const G4String particleName = "mu+";

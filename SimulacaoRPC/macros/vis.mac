@@ -8,3 +8,8 @@
 /vis/scene/add/trajectories smooth
 /vis/scene/endOfEventAction accumulate
 /vis/scene/add/eventID
+
+# /tracking/verbose 1
+# /vis/modeling/trajectories/create/drawByCharge
+# /vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+# /vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2

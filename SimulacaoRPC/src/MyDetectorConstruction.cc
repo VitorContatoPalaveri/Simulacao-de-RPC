@@ -148,6 +148,48 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
 
 void MyDetectorConstruction::ConstructSDandField(){
 
+    ConstructElectricField();
+
     MySensitiveDetector *sensDet = new MySensitiveDetector("SensitiveDetector");
     logicCopper->SetSensitiveDetector(sensDet);
+}
+
+/**
+ * Extracted from https://github.com/allanjales/RPCSimulation.
+ */
+void MyDetectorConstruction::ConstructElectricField(){
+
+    // Parâmetros do campo
+    G4double voltage = config::voltage;
+    G4double gap = config::widthDet + config::widthHPL;
+    G4double electricFieldStrength = voltage / gap;
+
+	// Set local eletric field
+	fElectricField = new G4UniformElectricField(G4ThreeVector(0., 0., -electricFieldStrength));
+	fFieldManager = new G4FieldManager();
+	fFieldManager->SetDetectorField(fElectricField);
+	CreateChordFinder(fFieldManager, fElectricField);
+
+	// Set which parts will have eletric field
+	logicDetector->SetFieldManager(fFieldManager, true);
+	logicHPL->SetFieldManager(fFieldManager, true);
+}
+
+/**
+ * Extracted from https://github.com/allanjales/RPCSimulation.
+ */
+void MyDetectorConstruction::CreateChordFinder(G4FieldManager* fFieldManager, G4ElectricField* fElectricField){
+
+	fEquation = new G4EqMagElectricField(fElectricField);
+
+	fStepper = new G4ClassicalRK4(fEquation, 8);
+	G4cout << "G4ClassicalRK4 (default) is called" << G4endl;
+
+	G4double minStep  = 0.02 * um;
+	G4cout << "The minimal step in integral is equal to " << G4BestUnit(minStep, "Length") << G4endl;
+
+	fIntDriver = new G4MagInt_Driver(minStep, fStepper, fStepper->GetNumberOfVariables());
+	fChordFinder = new G4ChordFinder(fIntDriver);
+	fChordFinder->SetDeltaChord(minStep);
+	fFieldManager->SetChordFinder(fChordFinder);
 }

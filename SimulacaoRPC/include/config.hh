@@ -33,9 +33,24 @@ namespace config{
     const G4double SF6_fraction = 0.3 * perCent;
     const G4double CO2_fraction = 0. * perCent;
 
-    // ELECTRIC FIELD
+    // AMBIENTAL PARAMETERS
 
     const G4double voltage = 10. * kilovolt;
+    const G4double pressure = 1. * atmosphere;
+    const G4double temp = 293.15 * kelvin;
+
+    const G4double Efield = voltage / widthDet;
+
+    const G4double Wvalue = 27. * eV;  // Ionization energy
+
+    
+    const G4double Torr = 0.001315789 * atmosphere;
+
+    // Townsend gas constants
+    const G4double Agas = 15. / (cm * Torr);
+    const G4double Bgas = 300. * volt / (cm * Torr);
+
+    const G4double alpha = Agas * pressure * exp(-1. * Bgas * pressure / Efield);
 
     // PARTICLE GUN
 

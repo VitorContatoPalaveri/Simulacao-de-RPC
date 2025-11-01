@@ -11,6 +11,8 @@
 #include <G4RootAnalysisManager.hh>
 using G4AnalysisManager = G4RootAnalysisManager;
 
+#include "config.hh"
+
 class MySensitiveDetector : public G4VSensitiveDetector{
 
 public:

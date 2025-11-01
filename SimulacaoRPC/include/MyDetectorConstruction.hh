@@ -43,7 +43,10 @@ public:
     virtual G4VPhysicalVolume *Construct();
 
 private:
-    G4LogicalVolume *logicDetector;
+	G4LogicalVolume *logicWorld;
+	G4VPhysicalVolume *physWorld;
+
+	G4LogicalVolume *logicDetector;
 	G4VPhysicalVolume *physDetector;
 
 	G4LogicalVolume *logicHPL;

@@ -30,20 +30,23 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
     G4Element *elS = nist->FindOrBuildElement("S");
     
     // Criar os gases componentes
+
+    G4double pressure = config::pressure;
+    G4double temp = config::temp;
     
     // C2H2F4 (Tetrafluoroetano, HFC-134a)
-    G4Material *C2H2F4 = new G4Material("C2H2F4", 4.25*kg/m3, 3, kStateGas, 293.15*kelvin, 1*atmosphere);
+    G4Material *C2H2F4 = new G4Material("C2H2F4", 4.25*kg/m3, 3, kStateGas, temp, pressure);
     C2H2F4->AddElement(elC, 2);
     C2H2F4->AddElement(elH, 2);
     C2H2F4->AddElement(elF, 4);
     
     // i-C4H10 (Isobutano)
-    G4Material *isobutane = new G4Material("isobutane", 2.51*kg/m3, 2, kStateGas, 293.15*kelvin, 1*atmosphere);
+    G4Material *isobutane = new G4Material("isobutane", 2.51*kg/m3, 2, kStateGas, temp, pressure);
     isobutane->AddElement(elC, 4);
     isobutane->AddElement(elH, 10);
     
     // SF6 (Hexafluoreto de enxofre)
-    G4Material *SF6 = new G4Material("SF6", 6.17*kg/m3, 2, kStateGas, 293.15*kelvin, 1*atmosphere);
+    G4Material *SF6 = new G4Material("SF6", 6.17*kg/m3, 2, kStateGas, temp, pressure);
     SF6->AddElement(elS, 1);
     SF6->AddElement(elF, 6);
     
@@ -62,8 +65,8 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
     G4double rWorld = config::lengthDet * std::sqrt(2);
 
     G4Sphere *solidWorld = new G4Sphere("solidWorld", 0.0, rWorld, 0.0, 360. * deg, 0.0, 180. * deg);
-    G4LogicalVolume *logicWorld = new G4LogicalVolume(solidWorld, worldMat, "logicalWorld");
-    G4VPhysicalVolume *physWorld = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), logicWorld, "physWorld", 0, false, 0, checkOverlaps);
+    logicWorld = new G4LogicalVolume(solidWorld, worldMat, "logicalWorld");
+    physWorld = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), logicWorld, "physWorld", 0, false, 0, checkOverlaps);
 
     logicWorld->SetVisAttributes(G4VisAttributes::GetInvisible());  // Makes invisible (Duran Duran)
 
@@ -127,17 +130,9 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
     G4double widthCopper = config::widthCopper;
     G4double zCopperPos = widthDet/2 + widthHPL + widthGraphite + widthIns + widthCopper/2;
 
-    G4int nRows = config::nRows;
-    G4int nCols = config::nCols;
-
-    G4Box *solidCopper = new G4Box("solidCopper", 0.5 * lengthDet/nRows, 0.5 * lengthDet/nCols, 0.5 * widthCopper);
+    G4Box *solidCopper = new G4Box("solidCopper", 0.5 * lengthDet, 0.5 * lengthDet, 0.5 * widthCopper);
     logicCopper = new G4LogicalVolume(solidCopper, copper, "logicCopper");
-    
-    for(G4int i = 0; i < nRows; i++){
-        for(G4int j = 0; j < nCols; j++){
-            physCopper = new G4PVPlacement(0, G4ThreeVector(-0.5 * lengthDet + ((i+0.5) * lengthDet)/nRows, -0.5 * lengthDet + ((j+0.5) * lengthDet)/nCols, zCopperPos), logicCopper, "physCopper", logicWorld, false, j+i*nCols, checkOverlaps);
-        }
-    }
+    physCopper = new G4PVPlacement(0, G4ThreeVector(0., 0., zCopperPos), logicCopper, "physCopper", logicWorld, false, checkOverlaps);
 
     G4VisAttributes *copVisAtt = new G4VisAttributes(G4Color(.9, .29, .01, 1.));
     copVisAtt->SetForceSolid(true);
@@ -171,7 +166,7 @@ void MyDetectorConstruction::ConstructSDandField(){
     ConstructElectricField();
 
     MySensitiveDetector *sensDet = new MySensitiveDetector("SensitiveDetector");
-    logicCopper->SetSensitiveDetector(sensDet);
+    logicDetector->SetSensitiveDetector(sensDet);
 }
 
 /**
@@ -181,7 +176,7 @@ void MyDetectorConstruction::ConstructElectricField(){
 
     // Parâmetros do campo
     G4double voltage = config::voltage;
-    G4double gap = config::widthDet + config::widthHPL;
+    G4double gap = config::widthDet;
     G4double electricFieldStrength = voltage / gap;
 
 	// Set local eletric field
@@ -192,7 +187,6 @@ void MyDetectorConstruction::ConstructElectricField(){
 
 	// Set which parts will have eletric field
 	logicDetector->SetFieldManager(fFieldManager, true);
-	logicHPL->SetFieldManager(fFieldManager, true);
 
     // Ajustar precisão
     fFieldManager->SetDeltaOneStep(0.01 * mm);

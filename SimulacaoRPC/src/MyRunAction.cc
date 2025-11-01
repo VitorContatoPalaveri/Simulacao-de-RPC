@@ -9,6 +9,8 @@ MyRunAction::MyRunAction(){
     man->CreateNtupleDColumn("fX");
     man->CreateNtupleDColumn("fY");
     man->CreateNtupleDColumn("fZ");
+    man->CreateNtupleDColumn("nElectrons");
+    man->CreateNtupleDColumn("nElectrons_ind");
     man->FinishNtuple(0);
 }
 
@@ -23,7 +25,7 @@ void MyRunAction::BeginOfRunAction(const G4Run* run){
     std::stringstream strRunID;
     strRunID << runID;
 
-    man->OpenFile("output"+strRunID.str()+".root");
+    man->OpenFile("output_"+strRunID.str()+".root");
 
     // OBS: Para abrir, escrever no terminal
     //      root output.root
@@ -39,5 +41,5 @@ void MyRunAction::EndOfRunAction(const G4Run*){
     G4AnalysisManager *man = G4AnalysisManager::Instance();
 
     man->Write();
-    man->CloseFile("output.root");
+    man->CloseFile();
 }

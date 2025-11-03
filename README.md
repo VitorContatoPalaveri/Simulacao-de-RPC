@@ -36,11 +36,11 @@ para execução sem visualização.
 
 5. Analizar
 ```bash
-root output0.root
+root output_0.root
 ```
 e no terminal do ROOT
 ```root
 [1] new TBrowser
-[2] Hits->Draw("fX:fY", "", "colz")
+[2] Hits->Draw("detY:detX", "nElectrons_ind", "colz");
 [3] .q
 ```

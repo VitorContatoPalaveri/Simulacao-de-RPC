@@ -139,24 +139,24 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
     logicCopper->SetVisAttributes(copVisAtt);
 
     // === CORTES DE PRODUÇÃO ESPECÍFICOS PARA O GÁS ===
-    G4Region* gasRegion = new G4Region("GasRegion");
-    gasRegion->AddRootLogicalVolume(logicDetector);
-    G4ProductionCuts* gasCuts = new G4ProductionCuts();
-    gasCuts->SetProductionCut(0.01 * mm);
-    gasRegion->SetProductionCuts(gasCuts);
+    // G4Region* gasRegion = new G4Region("GasRegion");
+    // gasRegion->AddRootLogicalVolume(logicDetector);
+    // G4ProductionCuts* gasCuts = new G4ProductionCuts();
+    // gasCuts->SetProductionCut(0.01 * mm);
+    // gasRegion->SetProductionCuts(gasCuts);
 
-    G4ProductionCuts* fineCuts = new G4ProductionCuts();
-    fineCuts->SetProductionCut(0.001 * mm);
+    // G4ProductionCuts* fineCuts = new G4ProductionCuts();
+    // fineCuts->SetProductionCut(0.001 * mm);
 
-    G4Region* detectorRegion = new G4Region("DetectorRegion");
-    detectorRegion->AddRootLogicalVolume(logicHPL);
-    detectorRegion->AddRootLogicalVolume(logicGraphite);
-    detectorRegion->AddRootLogicalVolume(logicInsulator);
-    detectorRegion->SetProductionCuts(fineCuts);
+    // G4Region* detectorRegion = new G4Region("DetectorRegion");
+    // detectorRegion->AddRootLogicalVolume(logicHPL);
+    // detectorRegion->AddRootLogicalVolume(logicGraphite);
+    // detectorRegion->AddRootLogicalVolume(logicInsulator);
+    // detectorRegion->SetProductionCuts(fineCuts);
 
-    logicHPL->SetUserLimits(new G4UserLimits(0.1 * widthHPL));
-    logicGraphite->SetUserLimits(new G4UserLimits(0.1 * widthGraphite));
-    logicInsulator->SetUserLimits(new G4UserLimits(0.1 * widthIns));
+    // logicHPL->SetUserLimits(new G4UserLimits(0.1 * widthHPL));
+    // logicGraphite->SetUserLimits(new G4UserLimits(0.1 * widthGraphite));
+    // logicInsulator->SetUserLimits(new G4UserLimits(0.1 * widthIns));
 
     return physWorld;
 }

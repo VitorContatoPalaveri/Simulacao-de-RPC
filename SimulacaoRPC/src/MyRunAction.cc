@@ -9,8 +9,11 @@ MyRunAction::MyRunAction(){
     man->CreateNtupleDColumn("fX");
     man->CreateNtupleDColumn("fY");
     man->CreateNtupleDColumn("fZ");
+    man->CreateNtupleDColumn("detX");
+    man->CreateNtupleDColumn("detY");
     man->CreateNtupleDColumn("nElectrons");
     man->CreateNtupleDColumn("nElectrons_ind");
+    man->CreateNtupleDColumn("fGlobalTime");
     man->FinishNtuple(0);
 }
 

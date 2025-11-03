@@ -139,11 +139,11 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct(){
     logicCopper->SetVisAttributes(copVisAtt);
 
     // === CORTES DE PRODUÇÃO ESPECÍFICOS PARA O GÁS ===
-    // G4Region* gasRegion = new G4Region("GasRegion");
-    // gasRegion->AddRootLogicalVolume(logicDetector);
-    // G4ProductionCuts* gasCuts = new G4ProductionCuts();
-    // gasCuts->SetProductionCut(0.01 * mm);
-    // gasRegion->SetProductionCuts(gasCuts);
+    G4Region* gasRegion = new G4Region("GasRegion");
+    gasRegion->AddRootLogicalVolume(logicDetector);
+    G4ProductionCuts* gasCuts = new G4ProductionCuts();
+    gasCuts->SetProductionCut(0.01 * mm);
+    gasRegion->SetProductionCuts(gasCuts);
 
     // G4ProductionCuts* fineCuts = new G4ProductionCuts();
     // fineCuts->SetProductionCut(0.001 * mm);
